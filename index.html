@@ -110,7 +110,6 @@ main[data-view=mapa]~footer{display:none}
 .banner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 16px;font-size:14px;color:var(--ink2);margin-bottom:12px}
 footer{color:var(--mute);font-size:13px;padding:8px 0 48px;border-top:1px solid var(--line);margin-top:8px;padding-top:20px}
 footer .linkbtn{text-decoration:underline;text-underline-offset:3px;padding:0;min-height:0;font-size:13px;color:var(--ink2)}
-.modlink{display:block;margin-top:14px}.modlink .linkbtn{text-decoration:none;color:var(--mute)}
 /* map */
 .mapbox{position:relative;background:var(--bg);overflow:hidden;width:100vw;margin-left:calc(50% - 50vw);height:calc(100dvh - var(--sh,130px));min-height:360px}
 main[data-view=mapa]{padding:0}
@@ -248,7 +247,7 @@ textarea.in{padding:12px 14px;min-height:80px;resize:vertical}
     <div class="cards" id="cards"></div>
   </section>
 </main>
-<footer>Um projeto de colaboração coletiva: as informações vêm da comunidade e podem mudar. Viu algo diferente? <button class="linkbtn" id="repBtn">Reportar uma divergência</button><span class="modlink"><button class="linkbtn" id="modBtn">acesso moderador</button></span></footer>
+<footer>Um projeto de colaboração coletiva: as informações vêm da comunidade e podem mudar. Viu algo diferente? <button class="linkbtn" id="repBtn">Reportar uma divergência</button></footer>
 </div>
 
 <div class="dock">
@@ -609,8 +608,12 @@ async function loadQueue(){if(!sb||!isOwner)return;
   reps=ok(b).map(r=>({id:String(r.id),lugarId:r.lugar_id?String(r.lugar_id):'',lugarNome:r.lugar_nome||'',motivo:r.motivo,mensagem:r.mensagem||'',criadoEm:toMs(r.criado_em)}));
   admBadge();if(!$('#adm').hidden)renderAdmin()}
 async function checkAdmin(){let v=false;try{const{data}=await sb.auth.getSession();if(data?.session){const r=await sb.rpc('is_admin');v=r.data===true}}catch{}
-  isOwner=v;$('#admBtn').hidden=!v;$('#addBtn').lastChild.textContent=v?'Adicionar lugar':'Indicar um lugar';$('#modBtn').parentElement.hidden=v;render();if(v)loadQueue().catch(()=>{})}
-$('#modBtn').onclick=()=>{$('#login').reset();$('#lerr').textContent='';openSheet('login');setTimeout(()=>$('#lPass').focus(),30)};
+  isOwner=v;$('#admBtn').hidden=!v;$('#addBtn').lastChild.textContent=v?'Adicionar lugar':'Indicar um lugar';render();if(v)loadQueue().catch(()=>{})}
+/* acesso do moderador: endereço secreto #moderador */
+function openLogin(){$('#login').reset();$('#lerr').textContent='';openSheet('login');setTimeout(()=>$('#lPass').focus(),30)}
+async function modRoute(){if(location.hash!=='#moderador')return;try{history.replaceState(null,'',location.pathname+location.search)}catch{}
+  if(!sb)return;await checkAdmin();if(isOwner)openAdmin();else openLogin()}
+addEventListener('hashchange',modRoute);
 $('#login').addEventListener('submit',async e=>{e.preventDefault();const pw=$('#lPass').value;if(!pw){$('#lerr').textContent='Digite a senha.';return}
   if(!sb||!CFG.MODERADOR_EMAIL){$('#lerr').textContent='O site ainda não está configurado (veja config.js).';return}
   $('#lsend').disabled=true;
@@ -621,7 +624,7 @@ $('#login').addEventListener('submit',async e=>{e.preventDefault();const pw=$('#
   catch{$('#lerr').textContent='Sem conexão. Tente de novo.'}finally{$('#lsend').disabled=false}});
 $('#logout').onclick=async()=>{try{await sb.auth.signOut()}catch{}closeSheet();await checkAdmin();toast('Você saiu do modo moderador')};
 if(!sb){loaded=true;msg('O site ainda não está configurado. Preencha o arquivo config.js com os dados do Supabase.');render()}
-else{loadPlaces();checkAdmin();
+else{loadPlaces();if(location.hash==='#moderador')modRoute();else checkAdmin();
   addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){loadPlaces();if(isOwner)loadQueue().catch(()=>{})}})}
 }
 </script>
