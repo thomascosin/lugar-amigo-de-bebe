@@ -19,7 +19,7 @@
 --bg:light-dark(#F3F0EA,#161513);--card:light-dark(#FFFFFF,#201E1B);--ink:light-dark(#1A1917,#F2EEE8);--ink2:light-dark(#4A4640,#C9C3BA);--mute:light-dark(#7A746C,#958E85);
 --line:light-dark(#E5E0D8,#33302B);--soft:light-dark(#F1EDE6,#2A2724);--sun:#F7B32B;--onink:light-dark(#FFFFFF,#161513);
 --yesbg:light-dark(#EAF0DA,#27301A);--yes:light-dark(#3E5A10,#B8D07A);--no:light-dark(#9C4A3B,#E39A8B);
---l2:#F7B32B;--l1:#EE8A2E;--l0:#AFA69C;--zCentro:#F7B32B;--zNorte:#C2B8F0;--zSul:#AABF60;--zLeste:#EFBDB2;--zOeste:#CBBFAE;
+--l2:#F7B32B;--l1:#E8641E;--l0:#AFA69C;--zCentro:#F7B32B;--zNorte:#C2B8F0;--zSul:#AABF60;--zLeste:#EFBDB2;--zOeste:#CBBFAE;
 --serif:"Instrument Serif",Georgia,serif;--sans:Inter,system-ui,sans-serif;
 --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
@@ -40,7 +40,7 @@ header{display:flex;align-items:center;gap:10px;min-height:48px}
 .add:hover{opacity:.88}
 .add:disabled{opacity:.4}
 .hero{padding:clamp(28px,6vw,64px) 0 clamp(20px,3vw,32px)}
-.hero h1{font:400 clamp(40px,5.4vw,76px)/1 var(--serif);letter-spacing:-.018em;margin:0;max-width:13.2em;text-wrap:pretty}
+.hero h1{font:400 clamp(36px,4.3vw,58px)/1.02 var(--serif);letter-spacing:-.018em;margin:0;max-width:13.2em;text-wrap:pretty}
 .hero .bm{display:none}
 .hero h1 em{font-style:italic;white-space:nowrap}
 .rot{color:var(--sun);display:inline-block;transition:opacity .35s,transform .35s}
@@ -202,7 +202,7 @@ textarea.in{padding:12px 14px;min-height:80px;resize:vertical}
   .sheethead{position:relative;padding-top:26px}
   .legend{display:none}
 }
-@media(max-width:600px){.admbtn .t{display:none}.admbtn{padding:0 10px}.hero h1{font-size:42px}.hero .bm{display:inline}.card h3{font-size:28px}.key{flex-direction:column;gap:8px}}
+@media(max-width:600px){.admbtn .t{display:none}.admbtn{padding:0 10px}.hero h1{font-size:38px}.hero .bm{display:inline}.card h3{font-size:28px}.key{flex-direction:column;gap:8px}}
 @media (hover:none){.tip{display:none!important}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -328,7 +328,7 @@ try{if(CFG.SUPABASE_URL&&CFG.SUPABASE_ANON_KEY&&window.supabase)sb=window.supaba
 const MOTIVOS=['Trocador','Cadeirão','Lugar fechou','Nome ou bairro errado','Outro'];
 const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const st={q:'',troc:false,cad:false,zone:null,dist:null};
-const PIN=p=>p.trocador&&p.cadeirao?'#F7B32B':(p.trocador||p.cadeirao)?'#EE8A2E':'#AFA69C';
+const PIN=p=>p.trocador&&p.cadeirao?'#F7B32B':(p.trocador||p.cadeirao)?'#E8641E':'#AFA69C';
 
 /* map */
 function drawBase(svg,cls){svg.setAttribute('viewBox',`0 0 ${GEO.w} ${GEO.h}`);
@@ -366,7 +366,7 @@ function drawPins(){const g=map.querySelector('.pins');
   g.innerHTML=filtered().map(p=>{const xy=posOf(p);if(!xy)return'';
     return`<circle class="pin${p.id===sel?' sel':''}" data-id="${esc(p.id)}" cx="${xy[0].toFixed(1)}" cy="${xy[1].toFixed(1)}" r="1" fill="${PIN(p)}"/>`}).join('');
   const s=g.querySelector('.sel');if(s)g.appendChild(s);scalePins()}
-$('#legend').innerHTML=`<span><i class="dot" style="background:#F7B32B"></i>Amigo de bebê</span><span><i class="dot" style="background:#EE8A2E"></i>Amigo em parte</span><span><i class="dot" style="background:#AFA69C"></i>Inimigo de bebê</span>`;
+$('#legend').innerHTML=`<span><i class="dot" style="background:#F7B32B"></i>Amigo de bebê</span><span><i class="dot" style="background:#E8641E"></i>Amigo em parte</span><span><i class="dot" style="background:#AFA69C"></i>Inimigo de bebê</span>`;
 /* --- gestures: drag with inertia, pinch, wheel/trackpad zoom, double tap/click zoom, tap pin --- */
 {const pts=new Map();let moved=false,last=null,vel=[0,0],lastT=0,downAt=null,lastTap=0,lastTapAt=null;
 const snap=()=>{const a=[...pts.values()];return{mx:a.reduce((s,p)=>s+p[0],0)/a.length,my:a.reduce((s,p)=>s+p[1],0)/a.length,d:a.length>1?Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]):0,n:a.length}};
