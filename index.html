@@ -35,12 +35,12 @@ button{cursor:pointer}
 .top{padding-top:calc(var(--st) + 16px)}
 header{display:flex;align-items:center;gap:10px;min-height:48px}
 .brand{display:flex;align-items:center;gap:8px;flex:1;font-weight:600;font-size:15px;letter-spacing:-.01em}
-.logo{width:26px;height:26px;flex:none}
+.logo{width:32px;height:32px;flex:none}
 .add{border:0;border-radius:999px;min-height:44px;padding:0 20px;font-weight:500;font-size:15px;background:var(--ink);color:var(--onink);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .add:hover{opacity:.88}
 .add:disabled{opacity:.4}
 .hero{padding:clamp(28px,6vw,64px) 0 clamp(20px,3vw,32px)}
-.hero h1{font:400 clamp(36px,4.3vw,58px)/1.02 var(--serif);letter-spacing:-.018em;margin:0;max-width:13.2em;text-wrap:pretty}
+.hero h1{font:400 clamp(36px,4.3vw,58px)/1.02 var(--serif);letter-spacing:-.018em;margin:0;white-space:nowrap}
 .hero .bm{display:none}
 .hero h1 em{font-style:italic;white-space:nowrap}
 .rot{color:var(--sun);display:inline-block;transition:opacity .35s,transform .35s}
@@ -202,7 +202,7 @@ textarea.in{padding:12px 14px;min-height:80px;resize:vertical}
   .sheethead{position:relative;padding-top:26px}
   .legend{display:none}
 }
-@media(max-width:600px){.admbtn .t{display:none}.admbtn{padding:0 10px}.hero h1{font-size:42px}.hero .bm{display:inline}.card h3{font-size:28px}.key{flex-direction:column;gap:8px}}
+@media(max-width:600px){.admbtn .t{display:none}.admbtn{padding:0 10px}.hero h1{font-size:min(calc((100vw - 36px)/10.1),42px)}.card h3{font-size:28px}.key{flex-direction:column;gap:8px}}
 @media (hover:none){.tip{display:none!important}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -210,12 +210,12 @@ textarea.in{padding:12px 14px;min-height:80px;resize:vertical}
 <body>
 <div class="top"><div class="wrap">
   <header>
-    <div class="brand"><svg class="logo" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="15" fill="#F7B32B"/><path d="M8.5 13q6.5 9 13 0" stroke="#1A1917" stroke-width="3" fill="none" stroke-linecap="round"/></svg><span>Lugar amigo de bebê</span></div>
+    <div class="brand"><svg class="logo" viewBox="0 0 30 30" role="img" aria-label="Lugar amigo de bebê"><circle cx="15" cy="15" r="15" fill="#F7B32B"/><g transform="rotate(-35 15 15)" fill="#1A1917"><circle cx="8.2" cy="15" r="3.2" fill="none" stroke="#1A1917" stroke-width="1.9"/><rect x="11" y="14.1" width="2.6" height="1.8"/><rect x="13.3" y="8.6" width="3.4" height="12.8" rx="1.7"/><path d="M16.4 13.3h2.2c3.4-.9 5.2 0 5.2 1.7s-1.8 2.6-5.2 1.7h-2.2z"/></g></svg></div>
     <button class="admbtn" id="admBtn" aria-label="Moderação" hidden><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 9.5 3.6 3h8.8L14 9.5V13H2zM2 9.5h3.5l1 1.5h3l1-1.5H14" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span class="t">Moderação</span><span class="badge" id="admCount"></span></button>
     <button class="add" id="addBtn"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Indicar um lugar</button>
   </header>
   <section class="hero">
-    <h1 aria-label="Descubra e indique restaurantes, cafés, bares e outros lugares para comer e beber com trocador e cadeirão para ir (ou deixar de ir) com bebês em São Paulo."><span aria-hidden="true">Descubra e indique <br class="bm"><span class="rot" id="rot">restaurantes</span><br>com trocador e cadeirão para ir <em>(ou deixar de ir)</em> com bebês em São Paulo.</span></h1>
+    <h1 aria-label="Descubra restaurantes, cafés, bares e outros lugares para comer e beber com trocador e cadeirão para ir (ou deixar de ir) com bebês em São Paulo."><span aria-hidden="true">Descubra <br class="bm"><span class="rot" id="rot">restaurantes</span><br>com trocador e cadeirão<br>para ir <em>(ou deixar de ir)</em><br>com bebês em São Paulo.</span></h1>
   </section>
 </div></div>
 <div class="stick"><div class="wrap">
@@ -442,7 +442,7 @@ function render(){
   const dc=$('#distChip');dc.hidden=!st.dist;dc.textContent=st.dist?`${st.dist}  ×`:'';
   map.querySelectorAll('.dist').forEach(p=>p.classList.toggle('on',GEO.d[+p.dataset.i].n===st.dist));
   const n=places.length,list=filtered().sort((a,b)=>lvOf(b)-lvOf(a)||(b.criadoEm||0)-(a.criadoEm||0));
-  $('#count').textContent=!loaded||!n?'':list.length===n?`${n} ${n===1?'indicado':'indicados'} em São Paulo`:`${list.length} de ${n}`;
+  $('#count').textContent=!loaded||!n?'':list.length===n?`${n} ${n===1?'lugar mapeado':'lugares mapeados'} em São Paulo`:`${list.length} de ${n} lugares`;
   const cards=$('#cards');
   if(!loaded)cards.innerHTML=`<div class="empty">Carregando…</div>`;
   else if(!n)cards.innerHTML=`<div class="empty"><b>Nenhum lugar ainda</b><p>Conhece um lugar com trocador ou cadeirão?</p><button class="add" data-add>Indicar o primeiro lugar</button></div>`;
@@ -476,8 +476,8 @@ $('#peek').addEventListener('click',e=>{if(e.target.closest('.x')){closePeek();s
   if(e.target.closest('[data-pedit]'))openForm({kind:'lugar',id:p.id},p);
   if(e.target.closest('[data-prep]'))openReport(p)});
 function setView(v){$('#main').dataset.view=v;document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));if(v==='lista')closePeek();scrollTo({top:v==='mapa'?$('.top').offsetHeight:0});if(v==='mapa')requestAnimationFrame(ensureInit)}
-{const W=['restaurantes','cafés','bares','padarias','sorveterias','lanchonetes','pizzarias','docerias','hamburguerias','confeitarias','botecos','cafeterias'];let i=0;const el=$('#rot');
- setInterval(()=>{if(document.hidden)return;i=(i+1)%W.length;if(reduce()){el.textContent=W[i];return}el.classList.add('out');setTimeout(()=>{el.textContent=W[i];el.classList.remove('out')},350)},2400)}
+{const W=['restaurantes','cafés','bares','padarias','sorveterias','lanchonetes','pizzarias','docerias','confeitarias','botecos','rolês','cafeterias'];let i=0;const el=$('#rot');
+ setInterval(()=>{if(document.hidden)return;i=(i+1)%W.length;if(reduce()){el.textContent=W[i];return}el.classList.add('out');setTimeout(()=>{el.textContent=W[i];el.classList.remove('out')},320)},2000)}
 addEventListener('scroll',()=>$('.stick').classList.toggle('stuck',scrollY>$('.top').offsetHeight-4),{passive:true});
 document.querySelector('.seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
 
