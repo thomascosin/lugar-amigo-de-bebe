@@ -441,7 +441,7 @@ function render(){
   document.querySelectorAll('[data-z]').forEach(b=>b.setAttribute('aria-pressed',st.zone===b.dataset.z));
   const dc=$('#distChip');dc.hidden=!st.dist;dc.textContent=st.dist?`${st.dist}  ×`:'';
   map.querySelectorAll('.dist').forEach(p=>p.classList.toggle('on',GEO.d[+p.dataset.i].n===st.dist));
-  const n=places.length,list=filtered().sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
+  const n=places.length,list=filtered().sort((a,b)=>lvOf(b)-lvOf(a)||(b.criadoEm||0)-(a.criadoEm||0));
   $('#count').textContent=!loaded||!n?'':list.length===n?`${n} ${n===1?'indicado':'indicados'} em São Paulo`:`${list.length} de ${n}`;
   const cards=$('#cards');
   if(!loaded)cards.innerHTML=`<div class="empty">Carregando…</div>`;
